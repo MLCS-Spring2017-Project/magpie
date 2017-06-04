@@ -40,8 +40,9 @@ class Document(object):
 
     def get_all_words(self):
         """ Return all words tokenized, in lowercase and without punctuation """
-        return [w.lower() for w in word_tokenize(self.text)
+        c = [w.lower() for w in word_tokenize(self.text)
                 if w not in string.punctuation]
+        return c
 
     def read_sentences(self):
         lines = self.text.split('\n')

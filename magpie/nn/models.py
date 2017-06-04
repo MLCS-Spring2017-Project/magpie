@@ -3,7 +3,7 @@ from keras.layers.core import Flatten, Dropout, Dense, Merge
 from keras.layers.normalization import BatchNormalization
 from keras.layers.recurrent import GRU
 from keras.models import Sequential
-
+from keras.regularizers import l1l2
 from magpie.config import SAMPLE_LENGTH
 
 
@@ -33,6 +33,7 @@ def cnn(embedding_size, output_length):
             input_length=SAMPLE_LENGTH,
             init='lecun_uniform',
             activation='tanh',
+            W_regularizer=l1l2(0.01)
         ))
         pool_length = SAMPLE_LENGTH - ngram_length + 1
         ngram_layer.add(MaxPooling1D(pool_length=pool_length))
@@ -49,7 +50,7 @@ def cnn(embedding_size, output_length):
     model.compile(
         loss='binary_crossentropy',
         optimizer='adam',
-        metrics=['accuracy'],
+        metrics=['fmeasure', 'accuracy'],
     )
 
     return model
